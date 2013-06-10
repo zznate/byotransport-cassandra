@@ -12,7 +12,7 @@ import org.vertx.java.core.json.JsonObject;
 /**
  * @author zznate
  */
-public class DynamicHandler extends BusModBase implements Handler<Message<String>> {
+public class DynamicHandler extends BusModBase implements Handler<Message<JsonObject>> {
 
   private final Logger logger = LoggerFactory.getLogger(DynamicHandler.class);
 
@@ -30,9 +30,9 @@ public class DynamicHandler extends BusModBase implements Handler<Message<String
   }
 
   @Override
-  public void handle(Message<String> jsonMessage) {
+  public void handle(Message<JsonObject> jsonMessage) {
    // logger.info("handling message: {}", jsonMessage.body());
     logger.info("handling message: {}", jsonMessage.body());
-    jsonMessage.reply("handled!");
+    jsonMessage.reply(new JsonObject().putBoolean("handled",true));
   }
 }

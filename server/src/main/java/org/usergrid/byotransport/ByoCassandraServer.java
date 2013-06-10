@@ -39,39 +39,7 @@ public class ByoCassandraServer implements CassandraDaemon.Server {
       }
     });
     rm = new RouteMatcher();
-    rm.get("/:keyspace/:cf/:key/filter/:lang/:filtersrc", new Handler<HttpServerRequest>() {
-      @Override
-      public void handle(final HttpServerRequest request) {
-        //request.response().end(formatParams(request));
-
-        vertx.eventBus().send("cassandra.handler.dynamic",formatParams(request), new Handler<Message<String>>() {
-          @Override
-          public void handle(Message<String> message) {
-            logger.info("received response: {}", message.body());
-            request.response().end(message.body());
-          }
-        });
-      }
-
-      private String formatParams(HttpServerRequest request) {
-        String keyspace = request.params().get("keyspace");
-        String cf = request.params().get("cf");
-        String lang = request.params().get("lang");
-        String filterSrc = request.params().get("filtersrc");
-        return new StringBuilder("extracted params:")
-                .append("\n keyspace: ")
-                .append(keyspace)
-                .append("\n cf: ")
-                .append(cf)
-                .append("\n language: ")
-                .append(lang)
-                .append("\n filter source: \n")
-                .append(filterSrc)
-                .append("\n")
-                .toString();
-      }
-    });
-
+    rm.get("/:keyspace/:cf/:key/filter/:lang/:filtersrc", new FilterRequestHandler(vertx));
     vertx.createHttpServer().requestHandler(rm).listen(8080);
 
 
