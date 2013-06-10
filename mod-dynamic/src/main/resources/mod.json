@@ -1,0 +1,5 @@
+{
+  "main":"org.usergrid.byotransport.mod.dynamic.DynamicHandler",
+  "worker":true,
+  "multi-threaded":true
+}
