@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.Vertx;
+import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
 import org.vertx.java.core.json.JsonObject;
@@ -40,8 +41,16 @@ public class ByoCassandraServer implements CassandraDaemon.Server {
     rm = new RouteMatcher();
     rm.get("/:keyspace/:cf/:key/filter/:lang/:filtersrc", new Handler<HttpServerRequest>() {
       @Override
-      public void handle(HttpServerRequest request) {
-        request.response().end(formatParams(request));
+      public void handle(final HttpServerRequest request) {
+        //request.response().end(formatParams(request));
+
+        vertx.eventBus().send("cassandra.handler.dynamic",formatParams(request), new Handler<Message<String>>() {
+          @Override
+          public void handle(Message<String> message) {
+            logger.info("received response: {}", message.body());
+            request.response().end(message.body());
+          }
+        });
       }
 
       private String formatParams(HttpServerRequest request) {
