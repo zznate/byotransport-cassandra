@@ -17,6 +17,10 @@ The raw groovy script we are applying is:
 
     { json -> if (json.getString('value').toInteger() > 21) return json else return null }
 
+The complete curl command against the default localhost transport started above is:
+
+    curl 'http://localhost:8080/myks/mycf/zznate/filter/groovy/%7B%20json%20-%3E%20if%20%28json.getString%28%27value%27%29.toInteger%28%29%20%3E%2021%29%20return%20json%20else%20return%20null%20%7D'
+
 To quickly encode this (or your own script) use the following python:
 
     import urllib; urllib.quote("{ json -> if (json.getString('value').toInteger() > 21) return json else return null }")
