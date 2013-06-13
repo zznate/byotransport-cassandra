@@ -1,4 +1,9 @@
-This project demonstrates how to create your own transport for Apache Cassandra. In this demo, we use Vert.x and Groovy to apply a column level filter to our results. 
+# Overview
+This project demonstrates how to create your own transport for Apache Cassandra. It was created in support of a lightning talk at the 2013 Cassandra Summit in San Francisco, CA. 
+
+
+## Quick Start
+In this demo, we use Vert.x and Groovy to apply a column level filter to our results. 
 
 If you are super impatient, download the source, use maven to install:
 
@@ -24,3 +29,21 @@ The complete curl command against the default localhost transport started above 
 To quickly encode this (or your own script) use the following python:
 
     import urllib; urllib.quote("{ json -> if (json.getString('value').toInteger() > 21) return json else return null }")
+
+## Details
+There are basically two classes you will be required to extend in order to build your own transport. Specifically:
+
+- o.a.c.service.CassandraDaemon
+- o.a.c.service.CassandraDaemon.Server 
+
+Useful properties to control in your Daemon implementation (and the defaults in this project):
+
+Property Name | Description | Default
+--------------|-------------|--------
+cassandra-foreground | Keep process in foreground | true
+log4j.defaultInitOverride | Override the log4j configuration | true
+log4j.configuration | Name of the log4j properties file | log4j.properties
+cassandra.start_rpc | Start the thrift server | false 
+cassandra.start_native_transport | Start the CQL3 transport | false
+
+These properties are best set in the main method of the Daemon implementation. 
