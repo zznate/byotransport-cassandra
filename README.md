@@ -31,11 +31,9 @@ To quickly encode this (or your own script) use the following python:
     import urllib; urllib.quote("{ json -> if (json.getString('value').toInteger() > 21) return json else return null }")
 
 ## Details
-There are basically two classes you will be required to extend in order to build your own transport. Specifically:
+There are two aspects to which we'll need to pay attention: configuraiton and implemementation. First we'll discuss configuration.
 
-- o.a.c.service.CassandraDaemon
-- o.a.c.service.CassandraDaemon.Server 
-
+### Configuration
 Useful properties to control in your Daemon implementation (and the defaults in this project):
 
 Property Name | Description | Default
@@ -46,4 +44,29 @@ log4j.configuration | Name of the log4j properties file | log4j.properties
 cassandra.start_rpc | Start the thrift server | false 
 cassandra.start_native_transport | Start the CQL3 transport | false
 
-These properties are best set in the main method of the Daemon implementation. 
+These properties are best set in the main method of the Daemon implementation described below.
+
+###Implementation
+There are basically two classes you will be required to extend in order to build your own transport. Specifically:
+
+- o.a.c.service.CassandraDaemon ("Daemon")
+- o.a.c.service.CassandraDaemon.Server ("Server")
+
+#### Daemon
+You should override the following methods in the Daemon implementation:
+
+- start
+- stop
+- setup
+
+In each one of these methods, the very first thing we should do is invoke super to ensure the rest of the Cassandra machinery is started correctly. 
+
+##### setup()
+This is where we instantiate the Server object. This is the place to acquire properties specific to your server and instantiate any other resources needed by such. 
+
+##### start()
+This is where you would actually start the transports your server is supporting. 
+
+##### stop()
+Clean up any resources and shut down the transport(s) you started in in the start and setup methods. 
+
