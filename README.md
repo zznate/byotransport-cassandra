@@ -62,11 +62,21 @@ You should override the following methods in the Daemon implementation:
 In each one of these methods, the very first thing we should do is invoke super to ensure the rest of the Cassandra machinery is started correctly. 
 
 ##### setup()
+[ByoDaemon#setup](https://github.com/zznate/byotransport-cassandra/blob/master/server/src/main/java/org/usergrid/byotransport/ByoDaemon.java#L32)
+
 This is where we instantiate the Server object. This is the place to acquire properties specific to your server and instantiate any other resources needed by such. 
 
 ##### start()
+[ByoDaemon#start](https://github.com/zznate/byotransport-cassandra/blob/master/server/src/main/java/org/usergrid/byotransport/ByoDaemon.java#L43)
+
 This is where you would actually start the transports your server is supporting. 
 
 ##### stop()
+[ByoDaemon#stop](https://github.com/zznate/byotransport-cassandra/blob/master/server/src/main/java/org/usergrid/byotransport/ByoDaemon.java#L49)
+
 Clean up any resources and shut down the transport(s) you started in in the start and setup methods. 
 
+#### Server
+The Server implementation really just has two life cycle methods: start and stop. They do precisely what they say on the tin so we'll not go in to detail on them. As you really define the Server - in effect the transport(s) itself - Server is just an implementation of an interface. 
+
+In the case of this project, the start method is where we programatically initialize Vert.x and load the modules. See [ByoCassandraServer#start](https://github.com/zznate/byotransport-cassandra/blob/master/server/src/main/java/org/usergrid/byotransport/ByoCassandraServer.java#L46) for details.
