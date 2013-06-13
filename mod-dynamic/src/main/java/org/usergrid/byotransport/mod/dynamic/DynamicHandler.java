@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.vertx.java.busmods.BusModBase;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.eventbus.Message;
+import org.vertx.java.core.json.JsonArray;
+import org.vertx.java.core.json.JsonElement;
 import org.vertx.java.core.json.JsonObject;
 
 import java.nio.ByteBuffer;
@@ -59,24 +61,32 @@ public class DynamicHandler extends BusModBase implements Handler<Message<JsonOb
             false,
             100);
     commands.add(slice);
-    Map<String,String> vals = new HashMap<>();
+    JsonObject result = new JsonObject();
     List<Row> rows;
     try {
 
       rows = StorageProxy.read(commands, ConsistencyLevel.ONE);
       ColumnFamily colFam = rows.get(0).cf;
-      logger.info("Found cols: {}", rows.size());
+      logger.info("Found rows: {}", rows.size());
+      JsonArray ja = new JsonArray();
       for ( IColumn c : colFam) {
-        vals.put(ByteBufferUtil.string(c.name().duplicate()),
-                ByteBufferUtil.string(c.value().duplicate()));
+        JsonObject jsonObject = new JsonObject()
+                .putString("name", ByteBufferUtil.string(c.name().duplicate()))
+                .putString("value", ByteBufferUtil.string(c.value().duplicate()));
+        jsonObject = (JsonObject)closure.call(jsonObject);
+        if ( jsonObject != null ) {
+          ja.addObject(jsonObject);
+        }
       }
-      vals = (Map)closure.call(vals);
+      result.putArray("columns", ja);
+      logger.info("Found cols: {}", result);
+
     } catch (Exception ex) {
       ex.printStackTrace();
       jsonMessage.reply(new JsonObject().putBoolean("handled",false).putString("error",ex.getMessage()));
       return;
     }
-    jsonMessage.reply(new JsonObject().putValue("results", vals));
+    jsonMessage.reply(new JsonObject().putValue("results", result));
   }
 
   private Closure parseGroovy(String script) {

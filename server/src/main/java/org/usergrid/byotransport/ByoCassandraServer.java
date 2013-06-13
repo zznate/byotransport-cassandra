@@ -120,17 +120,17 @@ public class ByoCassandraServer implements CassandraDaemon.Server {
 
     RowMutation rowMutation = new RowMutation("myks", ByteBufferUtil.bytes("zznate"));
     rowMutation.add(new QueryPath("mycf", null, ByteBufferUtil.bytes("amorton")),
-            ByteBufferUtil.bytes("vale"), System.currentTimeMillis()*1000);
+            ByteBufferUtil.bytes("21"), System.currentTimeMillis()*1000);
     rowMutation.add(new QueryPath("mycf", null, ByteBufferUtil.bytes("tnine")),
-                ByteBufferUtil.bytes("vale"), System.currentTimeMillis()*1000);
+                ByteBufferUtil.bytes("20"), System.currentTimeMillis()*1000);
     rowMutation.add(new QueryPath("mycf", null, ByteBufferUtil.bytes("edanuff")),
-                    ByteBufferUtil.bytes("vale"), System.currentTimeMillis()*1000);
+                    ByteBufferUtil.bytes("19"), System.currentTimeMillis()*1000);
     rowMutation.add(new QueryPath("mycf", null, ByteBufferUtil.bytes("scottganyo")),
-                    ByteBufferUtil.bytes("vale"), System.currentTimeMillis()*1000);
+                    ByteBufferUtil.bytes("22"), System.currentTimeMillis()*1000);
     rowMutation.add(new QueryPath("mycf", null, ByteBufferUtil.bytes("rockerston")),
-                    ByteBufferUtil.bytes("vale"), System.currentTimeMillis()*1000);
+                    ByteBufferUtil.bytes("23"), System.currentTimeMillis()*1000);
     rowMutation.add(new QueryPath("mycf", null, ByteBufferUtil.bytes("thobbs")),
-                    ByteBufferUtil.bytes("vale"), System.currentTimeMillis()*1000);
+                    ByteBufferUtil.bytes("24"), System.currentTimeMillis()*1000);
     List<IMutation> mutations = new ArrayList<IMutation>();
         mutations.add(rowMutation);
     try {
