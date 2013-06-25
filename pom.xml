@@ -26,6 +26,10 @@
     <modules>
         <module>server</module>
         <module>mod-dynamic</module>
+        <module>common</module>
+        <module>mod-read</module>
+        <module>mod-write</module>
+        <module>mod-meta</module>
     </modules>
     <dependencyManagement>
     <dependencies>

@@ -48,6 +48,7 @@ public class ByoCassandraServer implements CassandraDaemon.Server {
     PlatformLocator pl = new PlatformLocator();
     PlatformManager manager = pl.factory.createPlatformManager();
     vertx = manager.vertx();
+
     manager.deployModule("org.usergrid.byotransport~byotransport-cassandra-mod-dynamic~1.0-SNAPSHOT",
             new JsonObject(), 1, new Handler<AsyncResult<String>>() {
       @Override
@@ -56,6 +57,7 @@ public class ByoCassandraServer implements CassandraDaemon.Server {
 
       }
     });
+
     rm = new RouteMatcher();
     rm.get("/:keyspace/:cf/:key/filter/:lang/:filtersrc",
             new FilterRequestHandler(vertx, "cassandra.handler.dynamic"));
